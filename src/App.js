@@ -13,7 +13,7 @@ const App = () => {
   const handleEmailSubmit = async (enteredEmail) => {
     try {
       
-      const response = await fetch('http://localhost:4000/generateotp', {
+      const response = await fetch('http://localhost:4000/api/otp/generateotp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const App = () => {
     const handleOTPSubmit = async (enteredOTP) => {
       try {
         
-        const response = await fetch('http://localhost:4000/verifyotp', {
+        const response = await fetch('http://localhost:4000/api/otp/verifyotp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
