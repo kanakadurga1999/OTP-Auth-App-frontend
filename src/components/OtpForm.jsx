@@ -1,42 +1,68 @@
 
-import React, { useState } from 'react';
-import { TextField, Button, Container, Grid } from '@mui/material';
 
-const OTPForm = ({ onSubmit }) => {
-  const [otp, setOTP] = useState('');
+import React, { useState } from 'react'
+import { Link, useNavigate } from "react-router-dom";
+import {
+    Grid,
+    Typography,
+    TextField,
+    Button,
+    Container,
+    FormGroup,
+    FormControl,
+  } from "@mui/material";
+  import axios from 'axios'
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(otp);
-  };
+const OtpForm = () => {
+
+    const [otp, setField] = useState('');
+    const navigate = useNavigate()
+
+    const onSubmit = async () => {
+        const submit = await axios.post('http://localhost:4000/api/otp/verify-otp', {otp}).then((response) => {
+            if(response.data.message === 'Valid user'){
+                navigate('/welcome-page')
+            }else{
+                alert(response.data.message)
+            }
+        })
+    }
 
   return (
-    <section className="public">
-   
-    
-      <Container className="outerbox">
-    <form onSubmit={handleSubmit}>
-    <Grid item xs={12} sm={12} md={12}>
-   
-      <TextField
-        label="Enter OTP"
-        type="text"
-        variant="outlined"
-        value={otp}
-        onChange={(e) => setOTP(e.target.value)}
-      />
-      </Grid>
-      <Grid className="buttoncontainer" item xs={12} sm={12} md={12}>
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
-      </Grid>
-      
-    </form>
-    </Container>
-      
-    </section>
-  );
-};
+    <>
+    <div className="outercontainer">
+    <Container className="outerbox">
+          <Typography variant="h4">Please Enter OTP</Typography>
+          <FormGroup>
+            <FormControl>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={12}>
+                  <TextField
+                    variant="outlined"
+                    label="otp"
+                    name="otp"
+                    fullWidth
+                    required
+                    value={otp}
+                    onChange={(event) => setField(event.target.value)}
+                  />
+                </Grid>
+                <Grid className="buttoncontainer" item xs={12} sm={12} md={12}>
+                  <Button onClick={onSubmit} id="ctaprimary" variant="contained">
+                    <Link
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      Submit
+                    </Link>
+                  </Button>
+                </Grid>
+              </Grid>
+            </FormControl>
+          </FormGroup>
+        </Container>
+        </div>
+    </>
+  )
+}
 
-export default OTPForm;
+export default OtpForm
